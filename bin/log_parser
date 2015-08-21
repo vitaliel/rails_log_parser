@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+begin
+  require 'log_parser/cli'
+rescue LoadError
+  $LOAD_PATH << "#{File.dirname(__FILE__)}/../lib"
+  require 'log_parser/cli'
+end
+
+LogParser::Cli.new(ARGV).run
