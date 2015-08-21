@@ -14,8 +14,8 @@ describe LogParser::Rails do
       expect(elements).to eq [
         { time: '2015-08-18 16:24:21', pid: '53299', type: :start, method: 'GET', path: '/',
           ip: '127.0.0.1' },
-        { time: '2015-08-18 16:24:21', pid: '53299', type: :user, login: 'anonymous',
-          user_id: 'bgfq4qA1Gr2QjIaaaHk9wZ' },
+        { time: '2015-08-18 16:24:21', pid: '53299', type: :user, login: nil,
+          user_id: nil },
         { time: '2015-08-18 16:24:24', pid: '53299', type: :completed, request_time: '37',
           status: '302' },
         { time: '2015-08-20 06:45:10', pid: '12660', type: :start, method: 'GET', path: '/start',

@@ -45,11 +45,11 @@ grammar RailsFormat
   rule anonymous_user
     'anonymous user' {
       def login
-        'anonymous'
+        nil
       end
 
       def user_id
-        'bgfq4qA1Gr2QjIaaaHk9wZ'
+        nil
       end
     }
   end

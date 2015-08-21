@@ -6,7 +6,7 @@ module LogParser
     STARTED_REGEX = /^Started (?<method>\w+) "(?<path>[^"]+)" for (?<ip>[0-9.]+)/
     # Request made by anonymous user
     # Request made by user with ID = "cDhZxEb88r3OfzeJe5aVNr"/"lamp-bot"
-    USER_REGEX = /^Request made by (?<login>anonymous)|(user with ID = "(?<user_id>[^"]+)"\/"(?<login>[^"]+)")/
+    USER_REGEX = /^Request made by (anonymous)|(user with ID = "(?<user_id>[^"]+)"\/"(?<login>[^"]+)")/
     # Completed 200 OK in 520ms (Views: 233.3ms | ActiveRecord: 210.7ms)
     COMPLETED_REGEX = /^Completed (?<status>\d+) \w+ in (?<request_time>\d+)ms/
 
@@ -36,7 +36,7 @@ module LogParser
             result[:path] = m[:path]
           when :user
             result[:login] = m[:login]
-            result[:user_id] = m[:user_id] || 'bgfq4qA1Gr2QjIaaaHk9wZ'
+            result[:user_id] = m[:user_id]
           when :completed
             result[:status] = m[:status]
             result[:request_time] = m[:request_time]

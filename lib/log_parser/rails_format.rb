@@ -561,11 +561,11 @@ module RailsFormat
 
   module AnonymousUser0
     def login
-      'anonymous'
+      nil
     end
 
     def user_id
-      'bgfq4qA1Gr2QjIaaaHk9wZ'
+      nil
     end
   end
 
