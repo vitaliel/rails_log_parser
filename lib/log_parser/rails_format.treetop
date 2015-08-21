@@ -1,0 +1,117 @@
+# Generate with
+# tt rails_format.treetop
+
+grammar RailsFormat
+  rule log_line
+    time ' ' pid ' ' severity space ( start_line / user_line / completed ) any
+  end
+
+  rule time
+    integer '-' integer '-' integer ' ' integer ':' integer ':' integer
+  end
+
+  rule pid
+    '[' integer ']' # &{ |s| p s[1]; true }
+  end
+
+  rule severity
+    word
+  end
+
+  rule start_line
+    'Started ' http_method ' "' request_uri '" for ' ip_addr {
+      def type
+        :start
+      end
+    } # &{ |s| p s; true }
+  end
+
+  rule user_line
+    'Request made by ' ( anonymous_user / user_id_login ) {
+      def type
+        :user
+      end
+    }
+  end
+
+  rule completed
+    'Completed ' http_status ' ' status_str ' in ' request_time 'ms' {
+      def type
+        :completed
+      end
+    }
+  end
+
+  rule anonymous_user
+    'anonymous user' {
+      def login
+        'anonymous'
+      end
+
+      def user_id
+        'bgfq4qA1Gr2QjIaaaHk9wZ'
+      end
+    }
+  end
+
+  # user with ID = "cDhZxEb88r3OfzeJe5aVNr"/"lamp-bot"
+  rule user_id_login
+    'user with ID = "' guid '"/"' user_login '"' {
+      def login
+        user_login.text_value
+      end
+
+      def user_id
+        guid.text_value
+      end
+    }
+  end
+
+  rule guid
+    [^"]+
+  end
+
+  rule user_login
+    [^"]+
+  end
+
+  rule http_status
+    integer
+  end
+
+  rule status_str
+    word
+  end
+
+  rule request_time
+    integer
+  end
+
+  rule request_uri
+    [^"]+
+  end
+
+  rule http_method
+    word # &{ |s| p s; true }
+  end
+
+  rule ip_addr
+    integer ( '.' integer ) 3..3 # &{ |s| p s; true }
+  end
+
+  rule integer
+    [0-9]+
+  end
+
+  rule any
+    .*
+  end
+
+  rule word
+    [\w]+
+  end
+
+  rule space
+    ' '+
+  end
+end
