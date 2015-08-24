@@ -3,7 +3,7 @@ require 'csv'
 
 module LogParser
   class CsvExport
-    HEADERS = %i(host app time pid method path ip login user_id status request_time size)
+    HEADERS = %i(host app time pid method path ip login user_id status request_time size space_id)
 
     def initialize(io, app)
       @io = io

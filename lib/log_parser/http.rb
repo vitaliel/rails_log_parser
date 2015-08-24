@@ -6,14 +6,14 @@ module LogParser
     TIME = '(?<day>\d+)/(?<month>\w+)/(?<year>\d+):(?<time>\d+:\d+:\d+) \+(?<tz>\d+)'
     METHOD = '(?<method>\w+)'
     URI = '(?<uri>\S+)'
-    VER = 'HTTP/(?<http_ver>\d+.\d+)'
+    PROTO = '[^"]+'
     STATUS = '(?<status>\d+)'
     SIZE = '(?<size>(\d+|-))'
     # REFERRER = '(?<ref>[^"]+)'
     # AGENT = '(?<agent>[^"]+)'
 
     #  "#{REFERRER}" "#{AGENT}"
-    REGEX = /^#{IP} \S+ (?<login>\S+) \[#{TIME}\] "#{METHOD} #{URI} #{VER}" #{STATUS} #{SIZE}/
+    REGEX = /^#{IP} \S+ (?<login>\S+) \[#{TIME}\] "#{METHOD} #{URI} #{PROTO}" #{STATUS} #{SIZE}/
     MONTHS = {
       'Jan' => '01', 'Feb' => '02', 'Mar' => '03', 'Apr' => '04', 'May' => '05', 'Jun' => '06',
       'Jul' => '07', 'Aug' => '08', 'Sep' => '09', 'Oct' => '10', 'Nov' => '11', 'Dec' => '12'
