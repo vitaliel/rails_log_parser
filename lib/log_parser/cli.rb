@@ -8,6 +8,7 @@ module LogParser
     def initialize(args = ARGV)
       @options = OpenStruct.new(
         app: nil,
+        type: :rails,
         input: STDIN,
         output: STDOUT
       )
@@ -32,6 +33,10 @@ EOB
           @options.app = app
         end
 
+        opts.on('--type http|rails', String, 'Log file type, default to rails') do |type|
+          @options.type = type.to_sym
+        end
+
         opts.separator ''
         opts.separator 'Common options:'
         opts.on_tail('--help', 'Show this message') do
@@ -48,7 +53,12 @@ EOB
 
     def run
       csv = LogParser::CsvExport.new(@options.input, @options.app)
-      csv.export(@options.output)
+
+      if @options.type == :rails
+        csv.export(@options.output)
+      else
+        csv.export_http(@options.output)
+      end
     end
   end
 end

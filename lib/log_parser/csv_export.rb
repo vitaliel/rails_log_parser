@@ -3,7 +3,7 @@ require 'csv'
 
 module LogParser
   class CsvExport
-    HEADERS = %i(host app time pid method path ip login user_id status request_time)
+    HEADERS = %i(host app time pid method path ip login user_id status request_time size)
 
     def initialize(io, app)
       @io = io
@@ -21,6 +21,7 @@ module LogParser
         when :start
           row[:host] = @hostname
           row[:app] = @app
+          row[:size] = '0'
           pids[row[:pid]] = row
         when :user
           data = pids[row[:pid]]
@@ -46,5 +47,16 @@ module LogParser
         end
       end
     end
-  end
-end
+
+    def export_http(out_io)
+      csv = CSV.new(out_io, headers: HEADERS, write_headers: true)
+      parser = LogParser::Http.new(@io)
+
+      parser.parse do |row|
+        row[:host] = @hostname
+        row[:app] = @app
+        csv << row
+      end
+    end
+  end # CsvExport class
+end # LogParser
