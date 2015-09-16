@@ -1,4 +1,4 @@
-require 'log_parser/rails_format'
+# require 'log_parser/rails_format'
 require 'log_parser/rails_regexp_parser'
 require 'log_parser/convertor'
 
