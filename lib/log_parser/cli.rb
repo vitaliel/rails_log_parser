@@ -21,11 +21,11 @@ EOB
         opts.separator ''
         opts.separator 'Options:'
 
-        opts.on('-i', '--input', 'Set input file path, default stdin') do |path|
+        opts.on('-i', '--input PATH', 'Set input file path, default stdin') do |path|
           @options.input = File.open(path)
         end
 
-        opts.on('-o', '--output', 'Set output file path, default stdout') do |path|
+        opts.on('-o', '--output PATH', 'Set output file path, default stdout') do |path|
           @options.output = File.open(path, 'w')
         end
 
