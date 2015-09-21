@@ -1,7 +1,6 @@
 require 'optparse'
 require 'ostruct'
-
-require 'log_parser'
+require 'socket'
 
 module LogParser
   class Cli
@@ -9,6 +8,8 @@ module LogParser
       @options = OpenStruct.new(
         app: nil,
         type: :rails,
+        server: Socket.gethostname,
+        headers: false,
         input: STDIN,
         output: STDOUT
       )
@@ -29,6 +30,14 @@ EOB
           @options.output = File.open(path, 'w')
         end
 
+        opts.on('-s', '--server SRV', 'Set server hostname, default Socket.gethostname') do |srv|
+          @options.server = srv
+        end
+
+        opts.on('--headers', 'Print csv headers, default no headers') do
+          @options.headers = true
+        end
+
         opts.on('--app APP', String, 'Name of the application') do |app|
           @options.app = app
         end
@@ -39,7 +48,7 @@ EOB
 
         opts.separator ''
         opts.separator 'Common options:'
-        opts.on_tail('--help', 'Show this message') do
+        opts.on_tail('-h', '--help', 'Show this message') do
           puts opts
           exit
         end
@@ -52,7 +61,7 @@ EOB
     end
 
     def run
-      csv = LogParser::CsvExport.new(@options.input, @options.app)
+      csv = LogParser::CsvExport.new(@options)
 
       if @options.type == :rails
         csv.export(@options.output)

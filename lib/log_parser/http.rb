@@ -29,10 +29,12 @@ module LogParser
         next unless data
         size = data[:size]
         size = '0' if size == '-'
+        login = data[:login]
+        login = nil if login == '-'
 
         yield time: "#{data[:year]}-#{MONTHS[data[:month]]}-#{data[:day]} #{data[:time]}",
           ip: data[:ip],
-          login: data[:login],
+          login: login,
           method: data[:method],
           path: data[:uri],
           status: data[:status],

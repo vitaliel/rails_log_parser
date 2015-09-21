@@ -2,10 +2,20 @@ require 'stringio'
 
 describe LogParser::CsvExport do
   HEADERS = LogParser::CsvExport::HEADERS.map(&:to_s).join(',') + "\n"
+  let(:host) { 'fs1' }
+  let(:print_headers) { true }
+  let(:options) do
+    OpenStruct.new(
+      app: 'web',
+      type: :http,
+      server: host,
+      headers: print_headers,
+      input: input,
+    )
+  end
 
-  let(:host) { Socket.gethostname }
   let(:input) { File.open($root_dir + '/data/sample.log') }
-  let(:exporter) { LogParser::CsvExport.new(input, 'web') }
+  let(:exporter) { LogParser::CsvExport.new(options) }
 
   before do
     @old_stderr = STDERR.dup
@@ -42,6 +52,19 @@ describe LogParser::CsvExport do
       result = out.read
 
       expect(result).to eq(HEADERS + "#{host},web,2015-07-16 00:00:00,,GET,/health_check,10.44.101.12,frank,,200,,32,\n")
+    end
+
+    context 'when no headers' do
+      let(:print_headers) { false }
+
+      it 'exports' do
+        out = StringIO.new
+        exporter.export_http(out)
+        out.rewind
+        result = out.read
+
+        expect(result).to eq("#{host},web,2015-07-16 00:00:00,,GET,/health_check,10.44.101.12,frank,,200,,32,\n")
+      end
     end
   end
 

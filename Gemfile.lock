@@ -25,6 +25,3 @@ PLATFORMS
 DEPENDENCIES
   rspec
   treetop
-
-BUNDLED WITH
-   1.10.5

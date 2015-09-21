@@ -1,18 +1,18 @@
-require 'socket'
 require 'csv'
 
 module LogParser
   class CsvExport
     HEADERS = %i(host app time pid method path ip login user_id status request_time size space_id)
 
-    def initialize(io, app)
-      @io = io
-      @hostname = Socket.gethostname
-      @app = app
+    def initialize(options)
+      @options = options
+      @io = options.input
+      @hostname = options.server
+      @app = options.app
     end
 
     def export(out_io)
-      csv = CSV.new(out_io, headers: HEADERS, write_headers: true)
+      csv = CSV.new(out_io, headers: HEADERS, write_headers: @options.headers)
       parser = LogParser::Rails.new(@io)
       pids = {}
 
@@ -49,7 +49,7 @@ module LogParser
     end
 
     def export_http(out_io)
-      csv = CSV.new(out_io, headers: HEADERS, write_headers: true)
+      csv = CSV.new(out_io, headers: HEADERS, write_headers: @options.headers)
       parser = LogParser::Http.new(@io)
 
       parser.parse do |row|
